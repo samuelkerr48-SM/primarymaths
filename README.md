@@ -11,7 +11,7 @@ questions, programs or slides. Each school keeps those in its own Teaching and L
 ## Put it on GitHub Pages (once)
 
 1. Make a repository on GitHub (for example `vlp-maths-tools`). It can be public: nothing in it is VLP content.
-2. Upload the files in this folder: `index.html`, `sw.js`, `manifest.webmanifest`, `icon.svg`, `README.md`.
+2. Upload the files in this folder: `index.html`, `sw.js`, `manifest.webmanifest`, `favicon.ico`, the three icon PNGs, `README.md`.
 3. In the repository: **Settings › Pages › Build and deployment**: Source **Deploy from a branch**, branch **main**, folder **/ (root)**. Save.
 4. After a minute the address shows at the top of that page, e.g. `https://<your account>.github.io/vlp-maths-tools/`. Give teachers that address.
 

@@ -2,7 +2,7 @@
    (so updates arrive straight away) and from this cache when it can't. No VLP content is ever cached here: it stays in
    the school's folder. */
 const CACHE = 'vlp-maths-primary';
-const FILES = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
+const FILES = ['./', './index.html', './manifest.webmanifest', './favicon.ico', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', e => {
