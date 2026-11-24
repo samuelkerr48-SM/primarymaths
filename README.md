@@ -1,7 +1,7 @@
 # VLP Maths Tools (Primary) — version 20.0
 
 The Maths Repository, Quadrant Check and Daily Review, as a web page. This folder holds the app only: no VLP lessons,
-questions, programs or slides. Each school keeps those in its own Teaching and Learning folder:
+questions, programs or slides. Each school keeps those in its own Teaching and Learning folder, and each teacher adds them to the tools once:
 
     Teaching and Learning › Whole School › VLP Resources
         VLP Maths data - Primary.zip
@@ -24,8 +24,6 @@ When the VLP content changes, give schools the new file(s) for their VLP Resourc
 
 ## Teachers
 
-Open the address in Microsoft Edge or Google Chrome, choose **Connect the Teaching and Learning folder**, and pick the
-Teaching and Learning folder that OneDrive syncs from the school's SharePoint. Other browsers (iPad, Safari, Firefox):
-**Choose the files instead**.
-
-The page also works opened straight from the file (index.html), with the same folder.
+Open the address, choose **Choose files…** and pick the files in the school's VLP Resources folder (all at once is fine).
+They're kept in the browser, so it's once per computer. Add or remove levels later in **Settings › VLP files**.
+Everything the tools make (planners, Quadrant Checks, Daily Review slides) downloads to the Downloads folder.
