@@ -508,7 +508,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     <button class="hbtn warn" type="button" id="bkBtn" hidden aria-label="Back up your year overview" title="Your year overview is kept in this browser only. Save a copy to a file so it isn't lost.">⚠<span class="lbl"> Back up</span></button>
     <button class="hbtn" type="button" id="undoBtn" disabled aria-label="Undo" title="Nothing to undo yet">↶<span class="lbl"> Undo</span></button>
     <button class="hbtn" type="button" id="setBtn" title="Year overview, branding, format, data, lesson slides and SharePoint">Settings</button>
-    <button class="hbtn" type="button" id="newsBtn">What's new</button>
+    <button class="hbtn" type="button" id="newsBtn" style="display:none" aria-hidden="true">What's new</button>
   </div>
 </header>
 <dialog id="setDlg" class="wide" aria-labelledby="setTitle"><div class="dlg">
@@ -628,7 +628,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     <p class="ver" id="slidesStorage"></p>
     <div class="msg" id="slidesMsg" role="status" aria-live="polite"></div>
   </div></details>
-  <div class="row"><button class="btn ghost close" type="button" data-close>Close</button></div>
+  <div class="row"><button class="btn ghost" type="button" id="tipsAgain">Show the Start here cards again</button><button class="btn ghost" type="button" id="welcomeAgain">Show the welcome again</button><button class="btn ghost close" type="button" data-close>Close</button></div>
 </div></dialog>
 <dialog id="keysDlg" aria-labelledby="keysTitle"><div class="dlg">
   <h2 id="keysTitle">Keyboard shortcuts</h2>
@@ -636,220 +636,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
   <p class="ver">Shortcuts don't apply while you're typing in a box.</p>
   <div class="row"><button class="btn ghost close" type="button" data-close>Close</button></div>
 </div></dialog>
-<dialog id="newsDlg" aria-labelledby="newsTitle"><div class="dlg">
-  <h2 id="newsTitle">What's new <span class="ver">· you have Version 19, 12 November 2026</span></h2>
-  <h3>Version 20.3 · 24 November 2026</h3>
-  <ul>
-    <li><b>School edits.</b> A leader chooses <b>Save school edits…</b> (Repository, beside Save my lessons and edits to a file) and saves <b>VLP Maths edits - School.json</b> into Whole School › VLP Resources, over the old copy. Teachers choose <b>Refresh school edits…</b> in Settings › VLP files. The school's lessons, edits, units and adjustments list come in under each teacher's own; if a teacher changed the same lesson, they choose whose to use.</li>
-    <li>Tip: in Chrome turn on <b>Ask where to save each file before downloading</b> (chrome://settings/downloads) to save the tools' files straight into Teaching and Learning.</li>
-  </ul>
-  <h3>Version 20.2 · 24 November 2026</h3>
-  <ul>
-    <li><b>No folder connections.</b> Add the VLP files once on each computer (the first screen, or <b>Settings › VLP files</b>): the data file, and the lesson slides and retrieval slides for the levels you teach. They're kept in the browser. Everything the tools make downloads to your Downloads folder.</li>
-  </ul>
-  <h3>Version 20.0 · 24 November 2026</h3>
-  <ul>
-    <li><b>The tools are on the web.</b> Open them from one web address; a new version reaches everyone the next time they open it (a strip offers to reload if they have them open).</li>
-    <li><b>The VLP content is in files your school keeps</b> (Whole School › VLP Resources), not in the tools.</li>
-    <li>Moving from the HTML file: in it choose <b>Back up</b>, then here <b>Back up › Restore</b>, once.</li>
-  </ul>
-  <h3>Version 19.8 · 24 November 2026</h3>
-  <ul>
-    <li><b>Multi-age classes.</b> A composite class can have 2 to 4 levels (click a level again to take it out). Its year overview has a row for each level in every term.</li>
-    <li><b>Program:</b> the Department's mixed-age program (Levels 1 and 2, 3 and 4, 5 and 6), or <b>Our own overview</b>, which starts from each level's own program or blank. Build it by dragging sequences between weeks and terms, onto the shelf and back.</li>
-    <li><b>Combine units:</b> click one sequence from each level, tick the lessons the class will be taught (all are ticked to start, with All and None for each sequence), and choose its weeks (4 lessons a week to start). The lessons are taught lowest level first. Click a combined unit to change its lessons or split it back into sequences. Sequences in its weeks move to free weeks, or to the shelf, and the overview says where.</li>
-    <li>The chosen lessons carry through: <b>Plan these lessons</b> ticks them in the Repository's planner in teaching order, and the Quadrant Check and Daily Review use only those lessons.</li>
-    <li><b>Daily Review for a composite class:</b> one list for the whole class. One memory booster (the levels take turns), then four unit slots, each with one count. A combined unit counts once. Interleave stays in the options; backfill and the classroom compass are under More options.</li>
-    <li>The relief teacher pack is gone.</li>
-  </ul>
-  <h3>Version 19.7 · 19 November 2026</h3>
-  <ul>
-    <li><b>Repository: find lessons by content description code.</b> Type a code such as <b>VC2M3N04</b> (or part of one, such as <b>N04</b>) in the unit filter to see every unit with lessons that address it. The matching lessons are highlighted and tagged with the code, and each unit shows how many of its lessons match.</li>
-  </ul>
-  <h3>Version 19.6 · 19 November 2026</h3>
-  <ul>
-    <li><b>Year overview: sequence order check.</b> When a sequence is moved earlier than a sequence it builds on at the same level, or that sequence is left out of the year, it's flagged: <b>Out of order</b> when several lessons rely on it, <b>Check</b> when only one or two do. Click a flag to see which lessons teach it and which use it, the shared content description, the Numeracy progression steps (each linked to the Australian Curriculum site), and the earlier-year sequences it rests on. Swap the two back, put a left-out sequence back in the year, or keep your order.</li>
-  </ul>
-  <h3>Version 19.5 · 19 November 2026</h3>
-  <ul>
-    <li><b>Repository: complete a unit plan.</b> Tick <b>Also complete a unit plan</b> under Build to get a Word unit plan for each unit in the planner, in the VCAA teaching and learning unit template: the unit's content descriptions and achievement standards, the continuum of learning (the level before and after), the assessment, and a row for every lesson with its learning intention, success criteria, lesson elements, Enable and Extend, Inclusion and resources, set out by week. Cohort considerations, essential questions, moderation and the reflection are left for your team to complete. Choose 3, 4 or 5 lessons per week.</li>
-    <li><b>Repository: the planner starts at the lessons.</b> The first page (overview, curriculum list and vocabulary) has been removed, so the Word document starts with the lessons.</li>
-  </ul>
-  <h3>Version 19.4 · 17 November 2026</h3>
-  <ul>
-    <li><b>Daily Review: Write my own.</b> In <b>+ Add a slide</b>, <b>Write my own</b> makes a review slide from the VLP templates (Classroom compass, Choice check, Think tank, Maths memory boosters) with the materials from the Retrieval Resources decks. The clock, ten frame, place value chart and part-part-whole model can be changed on the slide, and there are changeable tools for Levels 5 and 6 (number line, fraction bars, double number line, factor tree, function machine, table of values, Cartesian plane, angle, polygon, shapes with dimensions, prisms, column graph, dot plot, spinner, two dice grid). Add an answer slide if you want one.</li>
-    <li>Your school's slides are in <b>Our slides</b> at the top of <b>+ Add a slide</b>, with an orange <b>Our school</b> tag. They go into a day only when a teacher adds them. With the school folder connected they are saved in the sequence's <b>Daily Review › Our slides</b> folder, so the whole team sees them.</li>
-  </ul>
-  <h3>Version 19.3 · 17 November 2026</h3>
-  <ul>
-    <li><b>Saving to the school folder:</b> when a sequence's folder and file names make the path too long for Windows, the tool saves with a shorter name and says so, instead of saying the folder isn't on the computer.</li>
-    <li>The save box has a Close (×) and a Cancel button.</li>
-    <li>The planner's <b>Not Covered by the VLPs</b> box only appears when a unit in the planner has a supplementary lesson for that content.</li>
-  </ul>
-  <h3>Version 19.2 · 17 November 2026</h3>
-  <ul>
-    <li>Units you create yourself now only show in the tool for their level: a Level 3 unit made in the Primary tool no longer appears in the Secondary tool (and the other way round).</li>
-    <li><b>Lesson slides from your school folder.</b> Put the VLP Maths Slides files in <b>Teaching and Learning › Whole School › Tools › Lesson slides</b>, once for the school. Every teacher who connects the Teaching and Learning folder (Settings › SharePoint folder) gets the slides for <b>Also download the lesson slides</b>, with nothing to add on each computer. They're read from the folder, so a file updated there is used straight away.</li>
-    <li>Adding a slides file in Settings › VLP files still works, for Edge or a computer without the folder.</li>
-  </ul>
-  <h3>Version 19 · 12 November 2026</h3>
-  <ul>
-    <li><b>3 + 2: change how long a sequence runs.</b> Drag a sequence's right edge to give it more or fewer weeks, as in the blocked overview (or press Shift and an arrow key). Its panel shows the weeks its lessons need, with a button to go back to them.</li>
-    <li><b>Any composite class.</b> For two levels with no Department mixed-age program (for example Levels 4 and 5, or Foundation and Level 1), choose <b>Our own composite program</b>: a blank year overview with both levels' sequences on the shelf, to drag into the weeks you'll teach them. It works in the blocked and 3 + 2 overviews and in all three tabs. In the Daily Review and Quadrant Check, <b>Each level's own program</b> is still there.</li>
-  </ul>
-  <h3>Version 18.1 · 11 November 2026</h3>
-  <ul>
-    <li><b>Open the tools from your school's Teaching and Learning Hub (Google).</b> When your school's hub has the tools, <b>VLP tools › Open the VLP Maths Tools</b> opens them in the browser with nothing to download or install, and files save straight into the hub's Drive folders, by sequence.</li>
-  </ul>
-  <h3>Version 18 · 10 November 2026</h3>
-  <ul>
-    <li><b>Save straight into your school's SharePoint.</b> In <b>Settings › SharePoint folder</b>, connect the <b>Teaching and Learning</b> folder that OneDrive syncs from your school's site (Edge or Chrome). Files then go into the folder of the sequence they belong to: <b>Year › Mathematics › S02 Multiplicative thinking › Lessons</b> (planners and lesson slides), <b>› Daily Review</b> and <b>› Assessment</b> (Quadrant Check sheets and results).</li>
-    <li>A Daily Review or Quadrant Check goes to the sequence your year overview has for that week, or to <b>Review and consolidation</b> in a week with no new sequence. You see where before it saves, and can pick another year level or folder (handy for composite classes), or download it instead.</li>
-    <li>Folders are by sequence, not week, because the week a sequence is taught changes from year to year. The VLP Number Fact Fluency tool saves into the same folder, under <b>Number fact fluency</b>.</li>
-  </ul>
-  <h3>Version 17.1 · 9 November 2026</h3>
-  <ul>
-    <li>Clicking a sequence in the year overview now <b>opens it in the unit list</b>, with its lessons ready to tick. The lesson panel under the overview has gone. On the shelf, Enter adds a sequence to the year.</li>
-  </ul>
-  <h3>Version 17 · 5 November 2026</h3>
-  <ul>
-    <li><b>Choose adjustments</b> beside the Inclusion boxes (Some students, Specific students) in Edit lesson and + Add your own lesson: tick reasonable adjustments from a list grouped by area (from the Department's guidance for students with disability), search it, or <b>add your own</b>. Your own adjustments are kept for next time.</li>
-    <li>Ticked adjustments go into the box, and from there into the Word planner's Inclusion row. Anything you type in the box is kept.</li>
-    <li><b>Save a copy for your school</b> carries the adjustments you added, as <b>Our school's adjustments</b> for every teacher.</li>
-  </ul>
-  <h3>Version 16 · 5 November 2026</h3>
-  <ul>
-    <li><b>Create your own unit</b> in the Maths Repository, for content the VLP doesn’t cover or to mix lessons from different sequences and levels. Use <b>+ Create your own unit</b> on the shelf under the year overview or at the end of the unit list.</li>
-    <li>Give it a title, level and strand, then start empty, <b>build it from VLP lessons</b> (search every level and tick the lessons to copy) or <b>plan it by hand</b>. You can add <b>check questions</b> too.</li>
-    <li>Your unit is <b>orange</b>. It starts on the shelf in all three tabs; drag it into the year like any sequence. It takes 3 lessons a week for Number and Algebra and 2 a week for the other strands.</li>
-    <li>Its lessons have the usual <b>Edit</b> button. Copied lessons keep a link to the VLP lesson they came from, bring their VLP lesson slides and Daily Review slides, and bring the VLP summative questions on them to the Quadrant Check, with your check questions.</li>
-    <li><b>Edit unit</b> changes its details and the order of its lessons; <b>+ Add a lesson</b> adds more. Save my lessons and edits to a file, Our changes (Word) and Save a copy for your school all carry your units.</li>
-  </ul>
-  <h3>Version 15.3 · 5 November 2026</h3>
-  <ul>
-    <li><b>Daily Review: Interleave starts off</b>, so each unit's slides sit together and are easy to check. Turn it on in the left-hand menu to mix the units; the tool remembers your choice.</li>
-  </ul>
-  <h3>Version 15.2 · 4 November 2026</h3>
-  <ul>
-    <li><b>Slides files for Foundation to Level 4</b> (Primary) <b>Levels 7, 9 and 10</b> (Secondary, with the 10A units in Level 10; Level 7 in Primary too).</li>
-    <li>Lesson slides saved from Google Slides now download correctly.</li>
-  </ul>
-  <h3>Version 15.1 · 3 November 2026</h3>
-  <ul>
-    <li><b>Every option is shown again as standard</b>, including the Daily Review's slots on the left (the units the slides come from, and how many slides from each), backfill, reteach lessons and units from other levels. Curriculum leaders can still hide options for staff in Settings › Branding (What your staff see).</li>
-  </ul>
-  <h3>Version 15 · 1 November 2026</h3>
-  <ul>
-    <li><b>Simpler to use:</b> options can be tucked away until you click <b>More options</b> (top of the page). Curriculum leaders choose what staff see in Settings › Branding (What your staff see), and Save a copy for your school builds it in.</li>
-    <li><b>Three colours:</b> VLP lessons are plain, lessons the tool adds (reteach, supplementary, another level) are blue, and your school's (edited, teacher created, planned by hand) are orange. A key sits under the units.</li>
-    <li><b>Back up</b> (top of the page): one file with everything you've done in this browser, and <b>Restore</b> to put it back on any computer. A dot shows when there's work not backed up yet.</li>
-    <li><b>+ Add your own lesson</b> asks how to start: write it in full, copy a VLP lesson, or plan it by hand (an empty column in the planner, which replaces + Add a blank lesson).</li>
-    <li><b>Download</b> remembers your choices (A3 or A4, slides, summative map), shown on one line with <b>Change</b>.</li>
-    <li>In a school copy, Settings shows teachers what they need; what the school set is listed, with <b>Show all settings</b>.</li>
-    <li>Drop a <b>slides file</b> anywhere on the page to add it.</li>
-    <li>Each tab's description is one line, with <b>?</b> for more. A short welcome greets you the first time.</li>
-  </ul>
-  <details class="news15"><summary style="font-weight:700;cursor:pointer;margin:10px 0 4px">Earlier versions</summary>
-  <h3>Version 14 · 29 October 2026</h3>
-  <ul>
-    <li><b>Slides for teacher created lessons:</b> <b>Also download the lesson slides</b> now makes slides from what you wrote (warm up, modelled example with your key diagram, your turn, check for understanding, independent practice and exit ticket), on the VLP slides’ own layouts, with a small orange Teacher created label.</li>
-    <li><b>Your own questions for an edited lesson:</b> the edit form can add a Quadrant Check question and a Daily Review question, as well as the VLP’s, marked <b>Your question</b>. As for teacher created lessons, the tool won’t accept a question that repeats one from the lesson.</li>
-    <li><b>Our changes (Word)</b> (above the units): one A4 document of every edited and teacher created lesson, with the VLP’s wording beside yours and an Approved box for each, for a PLC or curriculum leader to review before building edits into the school copy.</li>
-  </ul>
-  <h3>Version 13 · 29 October 2026</h3>
-  <ul>
-    <li><b>Edit any lesson</b> in the Maths Repository: every lesson has an <b>Edit</b> button. It opens the same form as <b>Add your own lesson</b>, filled in with the lesson, so you can change its wording, steps, questions, success criteria, vocabulary or key diagram (add, change or remove the picture). Each changed row shows the VLP’s wording, so you can put it back.</li>
-    <li>An edited lesson’s button turns purple and reads <b>Edited</b>. In the Word planner the lesson has your wording, with a purple border round its number and title.</li>
-    <li><b>Save my lessons and edits to a file</b> shares your edits with your team, and <b>Save a copy for your school</b> (Settings › Branding) builds them in for every teacher. The Quadrant Check, Daily Review and lesson slides keep the VLP’s own questions and slides.</li>
-  </ul>
-  <h3>Version 12 · 28 October 2026</h3>
-  <ul>
-    <li><b>The lesson slides are now a separate file for each level</b> (for example VLP Maths Slides - Level 8.zip), so this file is much smaller and opens faster. The first time you tick <b>Also download the lesson slides</b> for a level, choose that level's slides file. It's kept on this computer, so you're only asked once.</li>
-    <li><b>Settings › VLP files:</b> the levels on this computer, add or remove slides files, or (in Chrome and Edge) use your school's slides folder. Schools can add a link to where they keep the slides files, and <b>Save a copy for your school</b> builds it in.</li>
-    <li>Slides files so far: Foundation, Level 1, Level 2, Level 3, Level 4, Level 5, Level 6, Level 7.</li>
-  </ul>
-  <h3>Version 11 · 27 October 2026</h3>
-  <ul>
-    <li><b>Also download the lesson slides</b> (Maths Repository, under the planner's download options): one PowerPoint with the VLP slides for the lessons you've ticked, in the planner's order, even when they come from different sequences. Every slide is copied unchanged from the VLP lesson PowerPoints, with a title slide before each lesson.</li>
-  </ul>
-  <h3>Version 10 · 24 October 2026</h3>
-  <ul>
-    <li><b>Add your own lesson</b> to any VLP sequence (Maths Repository › open a sequence › <b>+ Add your own lesson</b>). It sits in the sequence in orange under a <b>Teacher created</b> banner, with the same rows as the VLP lessons, and goes into the Word planner. Start from a blank form or copy a VLP lesson's rows.</li>
-    <li>It can give the <b>Quadrant Check</b> a check question and the <b>Daily Review</b> a review slide (after it has been taught). You write both questions: the tool won't accept one that repeats a question from the lesson.</li>
-    <li>Your lessons are kept in this browser. <b>Save my lessons to a file</b> (above the units) keeps a copy and shares them with your team.</li>
-  </ul>
-  <h3>Version 9 · 23 October 2026</h3>
-  <ul>
-    <li><b>One class and week bar</b> under the heading in every tab: the class level, Composite, the week and This week, in the same place and style.</li>
-    <li><b>Quadrant Check › Mark the sheet</b> has three views: <b>Mark a check</b>, <b>Class progress</b> (every lesson checked this term, last term or this year, with its result in each check and the trend, who keeps appearing in Tier 2, and how red lessons did when rechecked) and <b>Student history</b> (each student across class-grid checks). Both download as Excel.</li>
-    <li><b>Recheck after reteach:</b> Make the sheet offers the red questions from the class's last check, to put back on this sheet.</li>
-    <li><b>Print a blank class grid</b> to tick by hand while marking (Mark the sheet › Class grid).</li>
-    <li><b>Relief teacher pack:</b> each day now also has that day's lesson summary from the Maths Repository.</li>
-    <li><b>Search every level</b> in the Maths Repository: type a lesson or sequence name to find it at any level.</li>
-    <li><b>Keyboard shortcuts</b> (press <kbd>?</kbd>): 1, 2, 3 switch tabs; S saves marks; Ctrl+P prints the tab you're on, without the buttons.</li>
-    <li>Opens faster: the Repository and Quadrant Check no longer wait for the Daily Review's slides to load.</li>
-  </ul>
-  <h3>Version 8 · 23 October 2026</h3>
-  <ul>
-    <li><b>Quadrant Check: Make the sheet | Mark the sheet.</b> Two steps at the top of the tab. Mark the sheet opens the marking straight away, with the steps to follow (and a Word copy of them to download), the class and week being marked, and <b>Marked before</b> chips to reopen an earlier check. The bar with <b>Save results</b> stays at the bottom of the window and says when results aren't saved.</li>
-    <li><b>Marks are never lost by mistake.</b> Marks not yet saved are kept until you close the browser, even if you change the week, the class or the tab; you're reminded to save them.</li>
-    <li><b>Hide overview</b> in every tab: the year overview folds away to its title and stays folded until you show it again.</li>
-    <li><b>One look for all three tabs:</b> the Maths Repository now has the same heading and page width as the other two, so its 3 + 2 year overview fits its box.</li>
-    <li>Excel downloads are named like the other files (for example VLP-Maths-QuadrantResults_Level03_2026-T4W3.xlsx). A first-time card offers to set the file up for your school.</li>
-  </ul>
-  <h3>Version 7 · 21 October 2026</h3>
-  <ul>
-    <li><b>Data: Quadrant Check.</b> In <b>Settings › Data</b>, choose where the Maths Repository's traffic lights come from: <b>PAT Maths</b> or <b>Quadrant Check</b>.</li>
-    <li><b>Mark this check</b> (Quadrant Check tab, under the sheet): enter the results by <b>quick tally</b> (how many got each question right) or <b>class grid</b> (✓, ½, ✗ or absent for each student). It suggests next steps for each quadrant and, with the class grid, a possible Tier 2 group.</li>
-    <li>In the Maths Repository, each lesson a question came from gets a light (green 80% or more, amber 50–79%, red under 50%) from the latest check that included it, with its earlier results. The panel lists the checks marked and suggests what to do next. Suggestions only: nothing changes until you choose to.</li>
-    <li><b>Add to review</b> on a Quadrant Check suggestion (2 weeks ago, 4 weeks ago, A year ago) adds 2 slides a day from that sequence to the class's Daily Review, for two weeks (four for A year ago). Those slides are tagged <b>From Quadrant Check</b>; change or remove them under Backfill in the Daily Review.</li>
-    <li><b>Download as Excel</b>: one check (in the Quadrant Check tab) or every marked check (in the Maths Repository), with each student's marks for class-grid checks.</li>
-  </ul>
-  <h3>Version 6 · 21 October 2026</h3>
-  <ul>
-    <li><b>Settings</b> (top of the page) replaces the Year overview and Branding buttons. It has four sections: <b>Year overview</b>, <b>Branding</b>, <b>Format</b> and <b>Data</b>.</li>
-    <li><b>Format: 3 + 2.</b> Each week, 3 Number and algebra lessons and 2 Measurement, space, statistics and probability lessons. The year overview in every tab has two rows a term, so two sequences run side by side. Click a sequence to <b>split it into parts</b> (as many as you like) and drag each part to where you'll teach it. The Repository orders lessons 3 + 2 and marks each week; the Daily Review reviews both current sequences; the Quadrant Check checks both rows in every quadrant. <b>Blocked</b> keeps the Department's program, and switching back loses nothing.</li>
-    <li><b>Data: PAT Maths.</b> Upload your class's PAT Maths results in the Maths Repository and each lesson gets a traffic light. The panel shows the date the class sat each test (enter it if the file doesn't say) and recommends the year-level test over the adaptive test.</li>
-    <li><b>Save a copy for your school</b> (under Branding) now carries the format and data settings too.</li>
-  </ul>
-  <h3>Version 5 · 21 October 2026</h3>
-  <ul>
-    <li><b>Branding</b> has a <b>School name</b> box. The name shows beside the logo at the top of the tools, and with the logo and colours in the page header of the Maths Repository's Word planners and, new, the Quadrant Check's Word sheets.</li>
-  </ul>
-  <h3>Version 4 · 21 October 2026</h3>
-  <ul>
-    <li>Maths Repository: <b>reteach lessons</b> for 33 Foundation to Level 6 units (Place value, Additive thinking, Multiplicative thinking, Fractions and decimals, Patterns and algebra, and Time). Each VLP lesson has a Reteach column with two lessons: Reteach 1 goes back to materials and smaller steps, Reteach 2 is guided practice in new contexts. They print as teal columns after their lesson. They were drafted for these tools, not by the Department, so check them before teaching.</li>
-    <li><b>Branding</b> now also puts your school's logo and colours in the page header of the Word planner.</li>
-  </ul>
-  <h3>Version 3 · 20 October 2026</h3>
-  <ul>
-    <li><b>Undo</b> (top of the page, or Ctrl+Z) takes back the last change to the year overview, in any tab.</li>
-    <li><b>⚠ Back up</b> appears when your changes aren't saved to a file yet. Your year overview lives in this browser, so a copy keeps it safe.</li>
-    <li><b>Year overview</b> (top of the page): save it to a file, load one, print it on one A3 page, or see every change you've made from the Department's program. Moved sequences have a red corner in every tab.</li>
-    <li><b>Units from other levels</b>: under the shelf in any tab, add a sequence from another level to your class's year overview. All three tabs use it.</li>
-    <li><b>One class for all three tabs</b>: choose a level, or a composite class, in one tab and the others follow.</li>
-    <li><b>Branding</b>: your school's colours and logo, and a branded copy of the file to share with your staff.</li>
-    <li>Maths Repository: <b>This week</b> jumps to the sequence you're teaching now; <b>+ Add a blank lesson</b> adds a grey column for your own lesson; a download bar stays at the bottom of the window once you tick lessons.</li>
-    <li>Quadrant Check: <b>Open in the Repository</b> on each quadrant opens that sequence's lessons.</li>
-    <li>Daily Review: each slide keeps the tag of the unit it comes from, and slides you chose get a <b>✎ Chosen by you</b> chip; <b>Undo</b> after removing a slide; <b>Relief teacher pack</b> prints the week's slides with their answers.</li>
-    <li>"?" buttons explain the less obvious parts, and a short Start here card greets each tab the first time.</li>
-  </ul>
-  <p><button class="btn ghost" type="button" id="tipsAgain">Show the Start here cards again</button></p>
-  <h3>Version 2 · 20 October 2026</h3>
-  <ul>
-    <li>Every tool starts on Foundation the first time you open it, then remembers the level you choose.</li>
-    <li><b>Year overview file</b>: save your year overview to a file, and load it on another computer or share it with your team.</li>
-    <li>The same names in every tab: <b>Year overview</b>, <b>Save in this browser</b> and <b>Reset to Department program</b>.</li>
-    <li>Daily Review: unit names show in full, and Backfill and More options fold away until you need them.</li>
-    <li>Quadrant Check: <b>Backfill this topic in the Daily Review</b> on the A year ago quadrant.</li>
-  </ul>
-  <h3>Version 1 · 16 October 2026</h3>
-  <ul>
-    <li>The Maths Repository, Quadrant Check and Daily Review in one file, with one year overview shared by all three tabs.</li>
-  </ul>
-  </details>
-  <div class="row"><button class="btn ghost" type="button" id="welcomeAgain">Show the welcome again</button><button class="btn ghost close" type="button" data-close>Close</button></div>
-</div></dialog>
+<dialog id="newsDlg" aria-label="Not used"><div class="dlg"></div></dialog>
 <main class="frames" id="frames"><div class="loading" id="loading">Opening…</div></main>
 <section class="start" id="startCard" hidden aria-labelledby="startTitle" data-dyn><h2 id="startTitle"></h2><ol id="startSteps"></ol><div class="row"><button type="button" id="startOk">Got it</button></div></section>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden data-dyn></div>
@@ -2319,7 +2106,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   $('setupGo').addEventListener('click', () => { store.set('vlp.setup8', 1); $('setupCard').hidden = true; openSettings('brand'); });
   $('setupNo').addEventListener('click', () => { store.set('vlp.setup8', 1); $('setupCard').hidden = true; });
   window.addEventListener('beforeunload', e => { try { const u = frames.qc && frames.qc.contentWindow.VLPUNSAVED && frames.qc.contentWindow.VLPUNSAVED(); if (u) { e.preventDefault(); e.returnValue = ''; } } catch (_) {} });
-  $('tipsAgain').addEventListener('click', () => { store.del('vlp.tools.started'); $('newsDlg').close(); const t = cur(); if (t) startCard(t); });
+  $('tipsAgain').addEventListener('click', () => { store.del('vlp.tools.started'); $('setDlg').close(); const t = cur(); if (t) startCard(t); });
   // ---- dialogs and tabs ----
   $('newsBtn').addEventListener('click', () => $('newsDlg').showModal());
   document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target.closest('[data-close]') || e.target === d) d.close(); }));
@@ -2347,7 +2134,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1500));
   window.addEventListener('load', () => idle(() => { TOOLS.forEach(t => { try { source(t); } catch (_) {} }); }));
   // A newer file than the one last opened in this browser: point to What's new once.
-  if (store.get('vlp.tools.seen', '') !== '20.3'){ store.set('vlp.tools.seen', '20.3'); $('newsBtn').textContent = 'What\'s new ●'; }
+  if (store.get('vlp.tools.seen', '') !== '20.3'){ store.set('vlp.tools.seen', '20.3'); }
   // v9: open the Repository or Quadrant Check straight away; the Daily Review waits for its slides (show() handles it)
   setTimeout(start, 0);
 })();
@@ -3020,7 +2807,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function hideSetup() { try { localStorage.setItem('vlp.setup8', '1'); const c = $('setupCard'); if (c) c.hidden = true; } catch (e) {} }
   if (!store.get('vlp.welcome15', 0)) { store.set('vlp.tools.started', { repo: 1, qc: 1, dr: 1 }); hideSetup(); (window.VLPRES ? VLPRES.onReady(() => setTimeout(() => welcome(false), 900)) : setTimeout(() => welcome(false), 900)); }
   const ta = $('tipsAgain'); if (ta) ta.hidden = true;
-  const wa = $('welcomeAgain'); if (wa) wa.addEventListener('click', () => { try { $('newsDlg').close(); } catch (e) {} welcome(true); });
+  const wa = $('welcomeAgain'); if (wa) wa.addEventListener('click', () => { try { $('setDlg').close(); } catch (e) {} welcome(true); });
 
   // frames opened later pick up the simple view
   const fr = $('frames'); if (fr && window.MutationObserver) new MutationObserver(() => applyAll()).observe(fr, { childList: true });
