@@ -116,7 +116,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </style>
 <style id="brandCss" data-dyn></style>
 </head>
-<body data-vlp-version="20.9">
+<body data-vlp-version="20.10">
 <div id="vrBoot" class="vr-boot" role="dialog" aria-modal="true" aria-labelledby="vrTitle" data-dyn><div class="vr-card" id="vrCard"><p class="vr-wait">Opening the VLP Maths Tools…</p></div></div>
 <style>
 .vr-boot{position:fixed;inset:0;z-index:2147482000;background:#F3F4F8;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:clamp(16px,6vh,72px) 16px;font:16px/1.5 Calibri,'Segoe UI',Arial,sans-serif;color:#1B1838}
@@ -158,7 +158,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
    slides), add(files) / removeLevel(lv) / mountSettings() (Settings › VLP files). */
 (function () {
   'use strict';
-  const VERSION = '20.9';
+  const VERSION = '20.10';
   const DATA_NAME = 'VLP Maths data - Primary.zip', BAND = 'Primary', ALL = ['F', '1', '2', '3', '4', '5', '6', '7'];
   // a browser adds " (1)" to a second download of the same file
   const RX = /^VLP Maths Retrieval Slides - (Foundation|Level (\d+A?))(?: ?\(\d+\))?\.zip$/i, LX = /^VLP Maths Slides - (Foundation|Level \d+A?)(?: ?\(\d+\))?\.zip$/i;
@@ -764,7 +764,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </script>
 
 <header class="bar">
-  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.9 · 26 November 2026</small></div></div>
+  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.10 · 26 November 2026</small></div></div>
   <div class="tabs" role="tablist" aria-label="Tools">
     <button class="tab" role="tab" id="tab-repo" aria-controls="frame-repo" aria-selected="false" data-tool="repo">Maths Repository</button>
     <button class="tab" role="tab" id="tab-qc" aria-controls="frame-qc" aria-selected="false" data-tool="qc">Quadrant Check</button>
@@ -2400,7 +2400,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1500));
   window.addEventListener('load', () => idle(() => { TOOLS.forEach(t => { try { source(t); } catch (_) {} }); }));
   // A newer file than the one last opened in this browser: point to What's new once.
-  if (store.get('vlp.tools.seen', '') !== '20.9'){ store.set('vlp.tools.seen', '20.9'); }
+  if (store.get('vlp.tools.seen', '') !== '20.10'){ store.set('vlp.tools.seen', '20.10'); }
   // v9: open the Repository or Quadrant Check straight away; the Daily Review waits for its slides (show() handles it)
   setTimeout(start, 0);
 })();
@@ -2657,13 +2657,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       el.innerHTML = `
         <div class="vsp-state${H ? ' on' : ''}" role="status">${H ? `<b>Connected to the folder "${esc(H.name)}".</b> Files the tool makes are saved into it${pref().direct ? ', straight into the folder the tool picks' : ', after you check where'}.${p === 'granted' ? '' : ' The first time you save after opening the tool, the browser asks you to allow it again.'}` : '<b>Not connected.</b> Files download to your Downloads folder.'}</div>
         <div class="vff-drop" data-vffdrop>${H ? 'To change it, drag' : 'Drag'} your <b>Teaching and Learning</b> folder here from File Explorer</div>
-        <div class="vsp-row"><button type="button" class="vsp-btn" data-vsp="connect">${H ? 'Choose a different folder…' : 'Or choose it in a folder box…'}</button>${H ? '<button type="button" class="vsp-btn" data-vsp="forget">Disconnect</button>' : ''}</div>
+        ${H ? '<div class="vsp-row"><button type="button" class="vsp-btn" data-vsp="forget">Disconnect</button></div>' : ''}
         ${H ? `<label class="vsp-chk"><input type="checkbox" data-vsp="direct"${pref().direct ? ' checked' : ''}> <span>Save straight into the folder the tool picks, without asking each time</span></label>` : ''}
         <p class="vsp-msg" data-vsp="msg" role="alert"></p>
         <details><summary><b>How to set it up</b> (once on each computer)</summary>
           <ol>
             <li>On your school's SharePoint site, open the <b>Teaching and Learning</b> folder and choose <b>Add shortcut to My files</b> (or <b>Sync</b>). It appears in OneDrive in File Explorer (or Finder).</li>
-            <li>Open <b>File Explorer</b> beside the browser and find <b>Teaching and Learning</b> (under OneDrive).</li>\n            <li>Drag the <b>Teaching and Learning</b> folder onto the box above. When the browser asks, choose <b>Edit files</b> (or <b>Allow</b>). Dragging works on school laptops where the folder box doesn't.</li>
+            <li>Open <b>File Explorer</b> beside the browser and find <b>Teaching and Learning</b> (under OneDrive).</li>\n            <li>Drag the <b>Teaching and Learning</b> folder onto the dashed box above. When the browser asks, choose <b>Edit files</b> (or <b>Allow</b>).</li>
             <li>That's it. Every VLP tool opened on this computer uses the same folder.</li>
           </ol>
           <p class="vsp-note">The tools never see anything outside that folder. Folders are named by unit, not by week, so next year last year's files are in the same place.</p>
