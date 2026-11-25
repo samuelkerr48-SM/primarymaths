@@ -1,143 +1,30 @@
 <!DOCTYPE html>
-<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Folder access test · VLP Maths Tools</title>
-<link rel="icon" href="favicon.ico">
-<style>
-:root{--navy:#1F1646;--crim:#D40032;--mint:#B8E9EB;--ink:#1B1838;--muted:#5D5A73;--line:#D9D8E4;--ok:#0F7A55;--okbg:#E6F6EF;--no:#A3001F;--nobg:#FDECEF}
-*{box-sizing:border-box}body{margin:0;background:#F3F4F8;color:var(--ink);font:16px/1.5 Calibri,'Segoe UI',Arial,sans-serif}
-header{background:var(--navy);color:#fff;padding:14px 22px}header b{font-size:1.15rem}header span{opacity:.8;margin-left:8px;font-size:.9rem}
-main{max-width:860px;margin:22px auto;padding:0 16px;display:grid;gap:14px}
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-h1{font-size:1.5rem;margin:0 0 6px;color:var(--navy)}h2{font-size:1.1rem;margin:0 0 8px;color:var(--navy)}p{margin:0 0 8px}
-.muted{color:var(--muted);font-size:.95rem}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-button{font:inherit;font-weight:700;border-radius:10px;padding:9px 16px;min-height:44px;border:1px solid #B9B4CC;background:#fff;color:var(--navy);cursor:pointer}
-button.pri{background:var(--navy);border-color:var(--navy);color:#fff}button:disabled{opacity:.45;cursor:not-allowed}
-button:focus-visible{outline:3px solid var(--crim);outline-offset:2px}
-table{border-collapse:collapse;width:100%;font-size:.95rem}td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}td:first-child{width:46%;color:var(--muted)}
-.ok{color:var(--ok);font-weight:700}.no{color:var(--no);font-weight:700}
-#log{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.95rem}
-#log li{border-left:4px solid var(--line);padding:6px 10px;background:#FAFAFD;border-radius:6px}
-#log li.ok{border-color:var(--ok);color:var(--ink);font-weight:400}#log li.no{border-color:var(--no);color:var(--ink);font-weight:400}
-#log b{display:block}
-pre{white-space:pre-wrap;background:#F4F3F8;border-radius:8px;padding:10px;font-size:.85rem;margin:6px 0 0}
-</style></head><body>
-<header><b>VLP Maths Tools</b><span>Folder access test</span></header>
-<main>
-  <div class="card">
-    <h1>Can this computer let the tools open a folder?</h1>
-    <p>This page tests "option 2": a web page opening a folder you choose (such as the Teaching and Learning folder OneDrive syncs) and reading and saving files in it. It doesn't change anything except one small test file, which it removes again.</p>
-    <p class="muted">Run it here, and also from the downloaded file (double-click <b>folder-test.html</b>) to compare. Send the summary at the bottom to whoever is helping.</p>
-  </div>
-  <div class="card"><h2>1. This browser</h2><table id="env"></table></div>
-  <div class="card">
-    <h2>2. Open a folder</h2>
-    <p>Choose the <b>Teaching and Learning</b> folder (or any test folder). If the browser asks, choose <b>View files</b>, then <b>Edit files</b> (or Allow).</p>
-    <div class="row"><button class="pri" id="pickRead">Open a folder to read</button><button id="pickWrite">Open a folder to read and save</button></div>
-  </div>
-  <div class="card">
-    <h2>3. Use the folder</h2>
-    <div class="row"><button id="list" disabled>List what's in it</button><button id="find" disabled>Look for VLP Resources</button><button id="write" disabled>Save and remove a test file</button></div>
-  </div>
-  <div class="card">
-    <h2>4. Next visit</h2>
-    <p>The folder is remembered. Close this page, open it again (another day too), and choose this: it shows whether the browser lets the page back in without choosing the folder again.</p>
-    <div class="row"><button id="again">Use the remembered folder</button><button id="forget">Forget it</button></div>
-  </div>
-  <div class="card"><h2>What happened</h2><ul id="log"></ul></div>
-  <div class="card"><h2>Summary to send</h2><pre id="sum"></pre><div class="row"><button id="copy">Copy the summary</button></div></div>
-</main>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VLP folder test</title>
+<style>body{font:16px/1.5 Calibri,"Segoe UI",Arial,sans-serif;color:#1B1838;max-width:760px;margin:30px auto;padding:0 16px}h1{color:#1F1646}
+button{font:inherit;font-weight:700;border-radius:10px;padding:10px 16px;border:0;background:#1F1646;color:#fff;cursor:pointer;margin:4px 8px 4px 0}
+pre{background:#F3F4F8;border:1px solid #DDDAE8;border-radius:10px;padding:12px;white-space:pre-wrap;font-size:14px}</style></head><body>
+<h1>VLP folder test</h1>
+<p>Use this in the same browser as the VLP Maths Tools. Try each button twice: once choosing your <b>Blueprint Coaching</b> folder, once choosing <b>Teaching and Learning</b>. Then send a screenshot of the box at the bottom.</p>
+<button id="r">1. Choose a folder (read)</button><button id="w">2. Choose a folder (read and save)</button><button id="c">Clear</button>
+<pre id="out"></pre>
 <script>
-{
-const $ = id => document.getElementById(id);
-const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const lines = [];
-let H = null;
-function log(ok, title, detail) {
-  const li = document.createElement('li'); li.className = ok ? 'ok' : 'no';
-  li.innerHTML = `<b>${ok ? '✓' : '✗'} ${esc(title)}</b>${detail ? esc(detail) : ''}`; $('log').prepend(li);
-  lines.push((ok ? 'OK   ' : 'FAIL ') + title + (detail ? ' — ' + detail : '')); summary();
-}
-const ua = navigator.userAgent, browser = /Edg\//.test(ua) ? 'Microsoft Edge ' + (ua.match(/Edg\/([\d.]+)/) || [])[1] : /Chrome\//.test(ua) ? 'Google Chrome ' + (ua.match(/Chrome\/([\d.]+)/) || [])[1] : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Other';
-const env = [
-  ['Browser', browser],
-  ['Address', location.protocol === 'file:' ? 'A file on this computer' : location.host],
-  ['Secure page (needed)', window.isSecureContext ? 'Yes' : 'No'],
-  ['In a frame', window.top !== window ? 'Yes (folders can\'t be opened from inside a frame)' : 'No'],
-  ['Folder picker available', typeof window.showDirectoryPicker === 'function' ? 'Yes' : 'No (this browser can\'t open folders for a web page)'],
-  ['Remembering folders', typeof indexedDB !== 'undefined' ? 'Yes' : 'No']
-];
-const good = ([a, b]) => a === 'In a frame' ? b === 'No' : !/^No/.test(b) && !(a === 'Browser' && /Firefox|Safari|Other/.test(b));
-$('env').innerHTML = env.map(r => `<tr><td>${r[0]}</td><td class="${good(r) ? 'ok' : 'no'}">${esc(r[1])}</td></tr>`).join('');
-function summary() { $('sum').textContent = ['VLP Maths Tools — folder access test, ' + new Date().toLocaleString('en-AU')].concat(env.map(([a, b]) => a + ': ' + b), [''], lines).join('\n'); }
-summary();
-function why(e) {
-  const n = e && e.name;
-  if (n === 'AbortError') return 'The box closed without a folder (' + e.message + '). If no box appeared at all, a browser setting from IT is stopping web pages opening folders (check chrome://policy or edge://policy for FileSystem).';
-  if (n === 'SecurityError') return 'Not allowed here (' + e.message + '). Opened inside a frame, or blocked by a browser setting.';
-  if (n === 'NotAllowedError') return 'Permission refused (' + e.message + ').';
-  if (n === 'NotFoundError') return 'Not found (' + e.message + ').';
-  return (n || 'Error') + ': ' + (e && e.message || e);
-}
-// remember the folder
-const db = () => new Promise((res, rej) => { const r = indexedDB.open('vlp-folder-test', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
-const put = async v => { const d = await db(); return new Promise((res, rej) => { const t = d.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, 'h'); t.oncomplete = res; t.onerror = () => rej(t.error); }); };
-const get = async () => { const d = await db(); return new Promise(res => { const q = d.transaction('kv').objectStore('kv').get('h'); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }); };
-const del = async () => { const d = await db(); return new Promise(res => { const t = d.transaction('kv', 'readwrite'); t.objectStore('kv').delete('h'); t.oncomplete = res; }); };
-function ready(on) { ['list', 'find', 'write'].forEach(id => { $(id).disabled = !on; }); }
-async function pick(mode) {
-  if (typeof window.showDirectoryPicker !== 'function') { log(false, 'Open a folder', 'This browser has no folder picker for web pages. Use Edge or Chrome on a computer.'); return; }
-  log(true, 'Asked the browser for a folder (' + (mode === 'readwrite' ? 'read and save' : 'read') + ')', 'Waiting for the box…');
+const out = document.getElementById('out');
+const log = t => { out.textContent += t + '\n'; };
+log('Browser: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nPage: ' + location.href + '\nFolder picker available: ' + (typeof window.showDirectoryPicker === 'function') + '\n');
+async function go(mode) {
+  const t0 = performance.now(); log('--- ' + new Date().toLocaleTimeString() + ' choose (' + mode + ')');
   try {
-    H = await window.showDirectoryPicker({ id: 'vlp-test', mode });
-    log(true, 'Folder opened: ' + H.name);
-    try { await put(H); log(true, 'Folder remembered for next visit'); } catch (e) { log(false, 'Remembering the folder', why(e)); }
-    ready(true);
-  } catch (e) { log(false, 'Open a folder', why(e)); }
-}
-$('pickRead').onclick = () => pick('read');
-$('pickWrite').onclick = () => pick('readwrite');
-$('list').onclick = async () => {
-  try { const out = []; for await (const [n, e] of H.entries()) { out.push((e.kind === 'directory' ? '[folder] ' : '') + n); if (out.length >= 40) break; } log(true, 'Read the folder: ' + out.length + (out.length >= 40 ? '+' : '') + ' items', out.join(', ')); }
-  catch (e) { log(false, 'Read the folder', why(e)); }
-};
-$('find').onclick = async () => {
-  for (const p of [['Whole School', 'VLP Resources'], ['VLP Resources'], []]) {
-    try {
-      let d = H; for (const x of p) d = await d.getDirectoryHandle(x);
-      const names = []; for await (const [n, e] of d.entries()) if (e.kind === 'file' && /^VLP Maths/i.test(n)) names.push(n);
-      for await (const [n, e] of d.entries()) if (e.kind === 'directory' && /slides$/i.test(n)) { let c = 0; for await (const [m] of e.entries()) if (/\.zip$/i.test(m)) c++; names.push(n + ': ' + c + ' zip files'); }
-      if (names.length || p.length) {
-        const t0 = performance.now(); let size = '';
-        try { const fh = await d.getFileHandle('VLP Maths data - Primary.zip'); const f = await fh.getFile(); const b = await f.arrayBuffer(); size = ` Read VLP Maths data - Primary.zip (${Math.round(b.byteLength / 1048576)} MB) in ${Math.round(performance.now() - t0)} ms.`; } catch (e) { size = ' VLP Maths data - Primary.zip not readable there (' + (e.name || e) + ').'; }
-        log(true, 'Found ' + [H.name].concat(p).join(' › '), names.join(', ') + '.' + size); return;
-      }
-    } catch (e) { if (e.name !== 'NotFoundError' && e.name !== 'TypeMismatchError') { log(false, 'Look for VLP Resources', why(e)); return; } }
+    const h = await window.showDirectoryPicker({ id: 'vlp-test-' + mode, mode });
+    log('OK after ' + Math.round(performance.now() - t0) + ' ms: chose "' + h.name + '"');
+    let n = 0, names = [];
+    try { for await (const [nm, e] of h.entries()) { if (n++ < 12) names.push((e.kind === 'directory' ? '[folder] ' : '') + nm); } log('Inside (' + n + '): ' + names.join(', ')); } catch (e) { log('Reading inside failed: ' + e.name + ': ' + e.message); }
+    try { log('Save permission: ' + await h.queryPermission({ mode: 'readwrite' })); } catch (e) { log('Permission check failed: ' + e.name); }
+  } catch (e) {
+    log('FAILED after ' + Math.round(performance.now() - t0) + ' ms: ' + e.name + ': ' + e.message);
   }
-  log(false, 'Look for VLP Resources', 'No Whole School › VLP Resources folder in ' + H.name + '.');
-};
-$('write').onclick = async () => {
-  try {
-    let p = await H.queryPermission({ mode: 'readwrite' });
-    if (p !== 'granted') p = await H.requestPermission({ mode: 'readwrite' });
-    if (p !== 'granted') { log(false, 'Permission to save', 'The browser said: ' + p); return; }
-    const name = 'VLP folder test - delete me.txt', fh = await H.getFileHandle(name, { create: true }), w = await fh.createWritable();
-    await w.write('A test from the VLP Maths Tools folder access test, ' + new Date().toISOString() + '. Safe to delete.\n'); await w.close();
-    log(true, 'Saved a test file in ' + H.name);
-    try { await H.removeEntry(name); log(true, 'Removed the test file again'); } catch (e) { log(false, 'Removing the test file', why(e) + ' (delete "' + name + '" yourself)'); }
-  } catch (e) { log(false, 'Save a test file', why(e)); }
-};
-$('again').onclick = async () => {
-  try {
-    const h = await get(); if (!h) { log(false, 'Remembered folder', 'None remembered yet: open a folder in step 2 first.'); return; }
-    let p = await h.queryPermission({ mode: 'read' });
-    log(p === 'granted', 'Remembered folder: ' + h.name, 'Permission without asking: ' + p + '.');
-    if (p !== 'granted') { p = await h.requestPermission({ mode: 'read' }); log(p === 'granted', 'Asked again', 'The browser said: ' + p + '.'); }
-    if (p === 'granted') { H = h; ready(true); }
-  } catch (e) { log(false, 'Remembered folder', why(e)); }
-};
-$('forget').onclick = async () => { await del(); H = null; ready(false); log(true, 'Forgot the remembered folder'); };
-$('copy').onclick = async () => { try { await navigator.clipboard.writeText($('sum').textContent); $('copy').textContent = 'Copied'; } catch (e) { $('copy').textContent = 'Select the text and copy it'; } };
 }
-</script>
-</body></html>
+document.getElementById('r').onclick = () => go('read');
+document.getElementById('w').onclick = () => go('readwrite');
+document.getElementById('c').onclick = () => { out.textContent = ''; };
+</script></body></html>
