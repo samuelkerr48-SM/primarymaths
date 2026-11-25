@@ -116,7 +116,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </style>
 <style id="brandCss" data-dyn></style>
 </head>
-<body data-vlp-version="20.8">
+<body data-vlp-version="20.9">
 <div id="vrBoot" class="vr-boot" role="dialog" aria-modal="true" aria-labelledby="vrTitle" data-dyn><div class="vr-card" id="vrCard"><p class="vr-wait">Opening the VLP Maths Tools…</p></div></div>
 <style>
 .vr-boot{position:fixed;inset:0;z-index:2147482000;background:#F3F4F8;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:clamp(16px,6vh,72px) 16px;font:16px/1.5 Calibri,'Segoe UI',Arial,sans-serif;color:#1B1838}
@@ -158,7 +158,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
    slides), add(files) / removeLevel(lv) / mountSettings() (Settings › VLP files). */
 (function () {
   'use strict';
-  const VERSION = '20.8';
+  const VERSION = '20.9';
   const DATA_NAME = 'VLP Maths data - Primary.zip', BAND = 'Primary', ALL = ['F', '1', '2', '3', '4', '5', '6', '7'];
   // a browser adds " (1)" to a second download of the same file
   const RX = /^VLP Maths Retrieval Slides - (Foundation|Level (\d+A?))(?: ?\(\d+\))?\.zip$/i, LX = /^VLP Maths Slides - (Foundation|Level \d+A?)(?: ?\(\d+\))?\.zip$/i;
@@ -247,8 +247,8 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     $('vrCard').innerHTML = `<div class="vr-head"><b>VLP Maths Tools</b><span class="tg">${BAND.toUpperCase()}</span><span style="opacity:.8;font-size:.85rem">Version ${esc(VERSION)}</span></div><div class="vr-body">
       <h2 id="vrTitle">Add the VLP Maths Tools files</h2>
       <p>Choose the files from your school's <span class="vr-path">VLP Resources</span> folder, including the school edits file if there is one. You can choose them all at once. They're kept in this browser, so you only do this once on each computer.</p>
-      <div class="vr-drop" id="vrDrop"><b>Drop the files here</b><span class="vr-muted">or</span><div class="vr-row" style="justify-content:center;margin-top:8px"><label class="vr-btn pri" style="display:inline-flex;align-items:center;position:relative">Choose files…<input type="file" id="vrFiles" accept=".zip,.json" multiple style="position:absolute;opacity:0;width:1px;height:1px"></label></div></div>
-      ${window.VLPFOLDER && VLPFOLDER.supported() ? `<div class="vr-row" style="justify-content:center"><span class="vr-muted">Or, if your OneDrive has your school's <b>Teaching and Learning</b> folder:</span><button type="button" class="vr-btn" data-vr="folder">Connect the folder…</button></div>` : ''}
+      <div class="vr-drop" id="vrDrop"><b>Drop the files (or the Teaching and Learning folder) here</b><span class="vr-muted">or</span><div class="vr-row" style="justify-content:center;margin-top:8px"><label class="vr-btn pri" style="display:inline-flex;align-items:center;position:relative">Choose files…<input type="file" id="vrFiles" accept=".zip,.json" multiple style="position:absolute;opacity:0;width:1px;height:1px"></label></div></div>
+      ${window.VLPFOLDER && VLPFOLDER.supported() ? `<p class="vr-muted" style="text-align:center"><b>Quicker:</b> drag your school's <b>Teaching and Learning</b> folder from File Explorer onto the box. The tools find the files in it, and save into it from then on.</p>` : ''}
       <p class="vr-err${good ? ' good' : ''}" role="alert" id="vrMsg">${esc(msg || '')}</p>
       <table class="vr-tbl"><thead><tr><th>File</th><th>Status</th></tr></thead><tbody>
         <tr><td>${esc(DATA_NAME)} <span class="vr-muted">(needed)</span></td><td>${DATA ? '<span class="vr-chip ok">✓ Added</span>' + (DATA.made ? '<span class="vr-muted">made ' + esc(DATA.made) + '</span>' : '') : '<span class="vr-chip no">Not added</span>'}</td></tr>
@@ -262,7 +262,13 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     const dz = $('vrDrop');
     dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
     dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-    dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); addOnFirst(e.dataTransfer.files); });
+    dz.addEventListener('drop', e => {
+      e.preventDefault(); dz.classList.remove('over');
+      const files = Array.from(e.dataTransfer.files || []), ps = window.VLPFOLDER ? VLPFOLDER.grab(e.dataTransfer) : null;
+      if (!ps) { addOnFirst(files); return; }
+      $('vrMsg').className = 'vr-err good'; $('vrMsg').textContent = 'Adding…';
+      VLPFOLDER.fromDrop(ps).then(r => { if (r.notFolder) addOnFirst(files); else if (r.err) first(r.err); else if (DATA) first(r.msg, true); else first(r.msg + ' The data file wasn\'t in VLP Resources, so choose it too.'); }).catch(() => addOnFirst(files));
+    });
   }
   async function addOnFirst(files) {
     if (!files || !files.length) return;
@@ -549,7 +555,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     const n = e && e.name, m = e && e.message ? ' (' + e.message + ')' : '';
     const edge = /Edg\//.test(navigator.userAgent) ? ' You\'re in Microsoft Edge: on some school laptops Edge closes the folder box by itself, so try Google Chrome.' : '';
     if (n === 'AbortError' && ms != null && ms < 800) return 'The folder box didn\'t open. Your browser or school settings may be blocking folder access on this computer. The tools will keep downloading files instead. If you\'re in Chrome or Edge on a school laptop, ask IT whether File System Access (File editing) is blocked for ' + location.host + '.';
-    if (n === 'AbortError') return 'The browser didn\'t get the folder. Try again, but paste its address: in File Explorer open Teaching and Learning, click the address bar and copy it (C:\\Users\\…\\OneDrive - Department of Education\\Teaching and Learning). Then choose Connect, paste the address into the address bar at the top of the box, press Enter and choose Select folder. (Clicking the folder under OneDrive in the box\'s left-hand list doesn\'t work: Windows hands the browser a link instead of the folder.)' + edge;
+    if (n === 'AbortError') return 'The folder box didn\'t hand the folder over (school laptops often stop it). Drag the folder instead: open File Explorer beside the browser and drag Teaching and Learning onto the dashed box above.' + edge;
     if (n === 'SecurityError' || n === 'NotAllowedError') return 'The browser blocked that folder' + m + '. If you picked OneDrive, Documents or Desktop itself, choose Teaching and Learning inside it. Otherwise folder access may be switched off on this computer: files will download instead.';
     return 'The folder couldn\'t be connected' + m + '. Files will download instead.';
   }
@@ -719,18 +725,46 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
   // the school edits file, straight into Whole School › VLP Resources (the leader's own browser skips it when it checks)
   async function saveRes(blob, name) {
     const r = await root(true); if (!r || r.denied) return null;
-    const d = await dirAt(r, ['Whole School', 'VLP Resources'], true);
+    const found = await resDir(r), path = found ? found.path : ['Whole School', 'VLP Resources'];   // wherever the school keeps VLP Resources
+    const d = found ? found.d : await dirAt(r, path, true);
     const fh = await d.getFileHandle(name, { create: true }), w = await fh.createWritable(); await w.write(blob); await w.close();
     try { markSeen([await fh.getFile()]); } catch (e) {}
-    return [r.name, 'Whole School', 'VLP Resources', name];
+    return [r.name].concat(path, [name]);
   }
-  window.VLPFOLDER = { saveRes, supported, connected, pickError, scan, said, row, drawRow, connectFirst, markSeen, changed, updateSummary, auto };
+  // ---------- a folder dragged from File Explorer (20.9) ----------
+  // grab() must run inside the drop event: the dropped items can't be read after it
+  function grab(dt) { const its = Array.from((dt && dt.items) || []).filter(i => i.kind === 'file' && i.getAsFileSystemHandle); return its.length ? its.map(i => i.getAsFileSystemHandle().catch(() => null)) : null; }
+  async function fromDrop(ps) {
+    const hs = (await Promise.all(ps)).filter(Boolean), dir = hs.find(h => h.kind === 'directory');
+    if (!dir) return { notFolder: true };
+    const s = SP(); if (!s || !s.adopt) return { err: 'This browser can\'t connect a folder. Files will download instead.' };
+    const c = await s.adopt(dir);
+    let w = 'prompt'; try { w = await dir.queryPermission({ mode: 'readwrite' }); if (w !== 'granted') w = await dir.requestPermission({ mode: 'readwrite' }); } catch (e) {}
+    let r = {}; try { r = await scan(false); } catch (e) {}
+    const what = c.root || c.years.length ? `Connected to "${c.name}".` : `Connected to "${c.name}". It isn't called Teaching and Learning and has no year level folders, so the tools will make Foundation, Year 1 … folders in it. If that isn't right, drag the Teaching and Learning folder instead.`;
+    const save = w === 'granted' ? '' : ' The first time you save, the browser asks to allow it: choose Edit files (or Allow).';
+    return { msg: what + save + (r.res || r.same ? ' ' + said(r) : r.nofolder ? ' (No VLP Resources folder in it.)' : ''), c, r };
+  }
+  const css = document.createElement('style'); css.setAttribute('data-dyn', '');
+  css.textContent = '.vff-drop{border:2px dashed #5B4BA8;border-radius:12px;padding:16px;text-align:center;background:#F7F5FD;color:#1F1646;margin:10px 0;font-size:.95rem}.vff-drop.over{background:#E9F6F7;border-color:#1C7A80}';
+  document.head.appendChild(css);
+  document.addEventListener('dragover', e => { const z = e.target.closest && e.target.closest('[data-vffdrop]'); if (!z) return; e.preventDefault(); z.classList.add('over'); });
+  document.addEventListener('dragleave', e => { const z = e.target.closest && e.target.closest('[data-vffdrop]'); if (z) z.classList.remove('over'); });
+  document.addEventListener('drop', e => {
+    const z = e.target.closest && e.target.closest('[data-vffdrop]'); if (!z) return;
+    e.preventDefault(); z.classList.remove('over');
+    const ps = window.VLPFOLDER.grab(e.dataTransfer), box = z.parentNode, say = t => { const m = box && box.querySelector('[data-vsp="msg"]'); if (m) m.textContent = t; else toast(esc(t)); };
+    if (!ps) { say('Drag the folder itself from File Explorer (not a file).'); return; }
+    say('Connecting…');
+    fromDrop(ps).then(r => { if (r.notFolder) say('That was a file. Drag the Teaching and Learning folder itself.'); else say(r.err || r.msg); }).catch(x => say('That folder couldn\'t be connected (' + (x.message || x.name) + ').'));
+  });
+  window.VLPFOLDER = { grab, fromDrop, saveRes, supported, connected, pickError, scan, said, row, drawRow, connectFirst, markSeen, changed, updateSummary, auto };
   if (window.VLPRES) VLPRES.onReady(() => setTimeout(auto, 1500));
 })();
 </script>
 
 <header class="bar">
-  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.8 · 26 November 2026</small></div></div>
+  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.9 · 26 November 2026</small></div></div>
   <div class="tabs" role="tablist" aria-label="Tools">
     <button class="tab" role="tab" id="tab-repo" aria-controls="frame-repo" aria-selected="false" data-tool="repo">Maths Repository</button>
     <button class="tab" role="tab" id="tab-qc" aria-controls="frame-qc" aria-selected="false" data-tool="qc">Quadrant Check</button>
@@ -2366,7 +2400,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1500));
   window.addEventListener('load', () => idle(() => { TOOLS.forEach(t => { try { source(t); } catch (_) {} }); }));
   // A newer file than the one last opened in this browser: point to What's new once.
-  if (store.get('vlp.tools.seen', '') !== '20.8'){ store.set('vlp.tools.seen', '20.8'); }
+  if (store.get('vlp.tools.seen', '') !== '20.9'){ store.set('vlp.tools.seen', '20.9'); }
   // v9: open the Repository or Quadrant Check straight away; the Daily Review waits for its slides (show() handles it)
   setTimeout(start, 0);
 })();
@@ -2622,14 +2656,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       const p = H ? await perm(false) : 'none';
       el.innerHTML = `
         <div class="vsp-state${H ? ' on' : ''}" role="status">${H ? `<b>Connected to the folder "${esc(H.name)}".</b> Files the tool makes are saved into it${pref().direct ? ', straight into the folder the tool picks' : ', after you check where'}.${p === 'granted' ? '' : ' The first time you save after opening the tool, the browser asks you to allow it again.'}` : '<b>Not connected.</b> Files download to your Downloads folder.'}</div>
-        <div class="vsp-row"><button type="button" class="vsp-btn${H ? '' : ' pri'}" data-vsp="connect">${H ? 'Choose a different folder' : 'Connect my Teaching and Learning folder'}</button>${H ? '<button type="button" class="vsp-btn" data-vsp="forget">Disconnect</button>' : ''}</div>
+        <div class="vff-drop" data-vffdrop>${H ? 'To change it, drag' : 'Drag'} your <b>Teaching and Learning</b> folder here from File Explorer</div>
+        <div class="vsp-row"><button type="button" class="vsp-btn" data-vsp="connect">${H ? 'Choose a different folder…' : 'Or choose it in a folder box…'}</button>${H ? '<button type="button" class="vsp-btn" data-vsp="forget">Disconnect</button>' : ''}</div>
         ${H ? `<label class="vsp-chk"><input type="checkbox" data-vsp="direct"${pref().direct ? ' checked' : ''}> <span>Save straight into the folder the tool picks, without asking each time</span></label>` : ''}
         <p class="vsp-msg" data-vsp="msg" role="alert"></p>
         <details><summary><b>How to set it up</b> (once on each computer)</summary>
           <ol>
             <li>On your school's SharePoint site, open the <b>Teaching and Learning</b> folder and choose <b>Add shortcut to My files</b> (or <b>Sync</b>). It appears in OneDrive in File Explorer (or Finder).</li>
-            <li>In File Explorer, open <b>Teaching and Learning</b>, click the address bar at the top and copy the address (it looks like <b>C:\\Users\\…\\OneDrive - Department of Education\\Teaching and Learning</b>).</li>
-            <li>Here, select <b>Connect my Teaching and Learning folder</b>. In the box, click the address bar at the top, paste the address, press <b>Enter</b>, then choose <b>Select folder</b>, and <b>Edit files</b> (or <b>Allow</b>). Don't click the folder under OneDrive in the box's left-hand list: Windows hands the browser a link instead of the folder, and nothing connects.</li>
+            <li>Open <b>File Explorer</b> beside the browser and find <b>Teaching and Learning</b> (under OneDrive).</li>\n            <li>Drag the <b>Teaching and Learning</b> folder onto the box above. When the browser asks, choose <b>Edit files</b> (or <b>Allow</b>). Dragging works on school laptops where the folder box doesn't.</li>
             <li>That's it. Every VLP tool opened on this computer uses the same folder.</li>
           </ol>
           <p class="vsp-note">The tools never see anything outside that folder. Folders are named by unit, not by week, so next year last year's files are in the same place.</p>
@@ -2663,6 +2697,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     supported, ROOT, yearLabel, clean, hub: !!HUB, place: PLACE,
     load, connected: async () => !!(await load()), name: () => (H ? H.name : ''), perm,
     connect, forget, offer, toast, mount,
+    async adopt(h) { if (h.name !== ROOT) { try { h = await h.getDirectoryHandle(ROOT); } catch (e) {} } const years = await yearsIn(h); H = h; loaded = Promise.resolve(h); try { await kv('put', 'root', h); } catch (e) {} notify(); return { name: h.name, root: h.name === ROOT, years }; },
     reload() { H = null; loaded = null; },   // v20: the folder was connected on the first screen
     root: async () => { await load(); return H && !H.hub ? H : null; },   // 19.1: the connected folder, for the lesson slides
     setRouter(fn) { router = fn; },
