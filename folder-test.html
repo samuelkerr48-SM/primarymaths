@@ -7,6 +7,7 @@ pre{background:#F3F4F8;border:1px solid #DDDAE8;border-radius:10px;padding:12px;
 <h1>VLP folder test</h1>
 <p>Use this in the same browser as the VLP Maths Tools. Try each button twice: once choosing your <b>Blueprint Coaching</b> folder, once choosing <b>Teaching and Learning</b>. Then send a screenshot of the box at the bottom.</p>
 <button id="r">1. Choose a folder (read)</button><button id="w">2. Choose a folder (read and save)</button><button id="c">Clear</button>
+<div id="drop" style="border:3px dashed #5B4BA8;border-radius:12px;padding:26px;text-align:center;margin:12px 0;background:#F7F5FD;font-weight:700;color:#1F1646">3. Or drag a folder from File Explorer and drop it here</div>
 <pre id="out"></pre>
 <script>
 const out = document.getElementById('out');
@@ -26,5 +27,23 @@ async function go(mode) {
 }
 document.getElementById('r').onclick = () => go('read');
 document.getElementById('w').onclick = () => go('readwrite');
+const dz = document.getElementById('drop');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.background = '#E9F6F7'; });
+dz.addEventListener('dragleave', () => { dz.style.background = '#F7F5FD'; });
+dz.addEventListener('drop', async e => {
+  e.preventDefault(); dz.style.background = '#F7F5FD'; log('--- ' + new Date().toLocaleTimeString() + ' dropped');
+  const it = Array.from(e.dataTransfer.items || []).find(i => i.kind === 'file');
+  if (!it) { log('Nothing usable was dropped.'); return; }
+  if (!it.getAsFileSystemHandle) { log('This browser can\'t take a dropped folder.'); return; }
+  try {
+    const h = await it.getAsFileSystemHandle();
+    if (!h) { log('No folder came with the drop.'); return; }
+    log('Dropped ' + h.kind + ' "' + h.name + '"');
+    if (h.kind !== 'directory') return;
+    let n = 0, names = [];
+    try { for await (const [nm, x] of h.entries()) { if (n++ < 12) names.push((x.kind === 'directory' ? '[folder] ' : '') + nm); } log('Inside (' + n + '): ' + names.join(', ')); } catch (x) { log('Reading inside failed: ' + x.name + ': ' + x.message); }
+    try { let p = await h.queryPermission({ mode: 'readwrite' }); if (p !== 'granted') p = await h.requestPermission({ mode: 'readwrite' }); log('Save permission: ' + p); } catch (x) { log('Save permission failed: ' + x.name + ': ' + x.message); }
+  } catch (x) { log('FAILED: ' + x.name + ': ' + x.message); }
+});
 document.getElementById('c').onclick = () => { out.textContent = ''; };
 </script></body></html>
