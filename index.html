@@ -116,7 +116,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </style>
 <style id="brandCss" data-dyn></style>
 </head>
-<body data-vlp-version="20.7">
+<body data-vlp-version="20.8">
 <div id="vrBoot" class="vr-boot" role="dialog" aria-modal="true" aria-labelledby="vrTitle" data-dyn><div class="vr-card" id="vrCard"><p class="vr-wait">Opening the VLP Maths Tools…</p></div></div>
 <style>
 .vr-boot{position:fixed;inset:0;z-index:2147482000;background:#F3F4F8;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:clamp(16px,6vh,72px) 16px;font:16px/1.5 Calibri,'Segoe UI',Arial,sans-serif;color:#1B1838}
@@ -158,7 +158,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
    slides), add(files) / removeLevel(lv) / mountSettings() (Settings › VLP files). */
 (function () {
   'use strict';
-  const VERSION = '20.7';
+  const VERSION = '20.8';
   const DATA_NAME = 'VLP Maths data - Primary.zip', BAND = 'Primary', ALL = ['F', '1', '2', '3', '4', '5', '6', '7'];
   // a browser adds " (1)" to a second download of the same file
   const RX = /^VLP Maths Retrieval Slides - (Foundation|Level (\d+A?))(?: ?\(\d+\))?\.zip$/i, LX = /^VLP Maths Slides - (Foundation|Level \d+A?)(?: ?\(\d+\))?\.zip$/i;
@@ -284,7 +284,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     if (has) apply(); else first();
   }
   document.addEventListener('click', e => { const b = e.target.closest('[data-vr]'); if (!b || !$('vrBoot').contains(b)) return; if (b.dataset.vr === 'open' && DATA) apply();
-    if (b.dataset.vr === 'folder' && window.VLPFOLDER) { $('vrMsg').className = 'vr-err good'; $('vrMsg').textContent = 'Opening the folder box… Open OneDrive, click Teaching and Learning once, then Select folder. Choose Edit files (or Allow) when asked.'; VLPFOLDER.connectFirst().then(r => first(r.err || r.msg, !r.err)); }
+    if (b.dataset.vr === 'folder' && window.VLPFOLDER) { $('vrMsg').className = 'vr-err good'; $('vrMsg').textContent = 'Opening the folder box… Paste your Teaching and Learning folder\'s address (copied from File Explorer\'s address bar) into the address bar at the top of the box, press Enter, then Select folder. Choose Edit files (or Allow) when asked.'; VLPFOLDER.connectFirst().then(r => first(r.err || r.msg, !r.err)); }
   });
   document.addEventListener('change', e => { if (e.target && e.target.id === 'vrFiles') { addOnFirst(Array.from(e.target.files)); e.target.value = ''; } });
   // ---- Settings › VLP files ----
@@ -549,7 +549,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     const n = e && e.name, m = e && e.message ? ' (' + e.message + ')' : '';
     const edge = /Edg\//.test(navigator.userAgent) ? ' You\'re in Microsoft Edge: on some school laptops Edge closes the folder box by itself, so try Google Chrome.' : '';
     if (n === 'AbortError' && ms != null && ms < 800) return 'The folder box didn\'t open. Your browser or school settings may be blocking folder access on this computer. The tools will keep downloading files instead. If you\'re in Chrome or Edge on a school laptop, ask IT whether File System Access (File editing) is blocked for ' + location.host + '.';
-    if (n === 'AbortError') return 'No folder was chosen. Try again: open OneDrive, click your Teaching and Learning folder once, then Select folder. If Chrome said a folder "contains system files" or "can\'t be opened", you picked OneDrive itself: choose Teaching and Learning inside it.' + edge;
+    if (n === 'AbortError') return 'The browser didn\'t get the folder. Try again, but paste its address: in File Explorer open Teaching and Learning, click the address bar and copy it (C:\\Users\\…\\OneDrive - Department of Education\\Teaching and Learning). Then choose Connect, paste the address into the address bar at the top of the box, press Enter and choose Select folder. (Clicking the folder under OneDrive in the box\'s left-hand list doesn\'t work: Windows hands the browser a link instead of the folder.)' + edge;
     if (n === 'SecurityError' || n === 'NotAllowedError') return 'The browser blocked that folder' + m + '. If you picked OneDrive, Documents or Desktop itself, choose Teaching and Learning inside it. Otherwise folder access may be switched off on this computer: files will download instead.';
     return 'The folder couldn\'t be connected' + m + '. Files will download instead.';
   }
@@ -730,7 +730,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </script>
 
 <header class="bar">
-  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.7 · 26 November 2026</small></div></div>
+  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.8 · 26 November 2026</small></div></div>
   <div class="tabs" role="tablist" aria-label="Tools">
     <button class="tab" role="tab" id="tab-repo" aria-controls="frame-repo" aria-selected="false" data-tool="repo">Maths Repository</button>
     <button class="tab" role="tab" id="tab-qc" aria-controls="frame-qc" aria-selected="false" data-tool="qc">Quadrant Check</button>
@@ -847,7 +847,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
     </div>
     <div class="box" id="slidesSchoolBox" hidden>
       <h3 style="margin:0">From your school folder</h3>
-      <p>Put the slides files in <b>Teaching and Learning › Whole School › Tools › Lesson slides</b>, once for the whole school. Every teacher who connects the Teaching and Learning folder (Settings › SharePoint folder) then gets them, read from the folder, with nothing to add on each computer.</p>
+      <p>Put the slides files in <b>Teaching and Learning › Whole School › VLP Resources › Lesson slides</b>, once for the whole school. Every teacher who connects the Teaching and Learning folder (Settings › SharePoint folder) then gets them, read from the folder, with nothing to add on each computer.</p>
       <p class="ver" id="slidesSchoolNow"></p>
       <div class="row"><button class="btn ghost" type="button" id="slidesSchoolScan">Look in the school folder now</button></div>
     </div>
@@ -1631,7 +1631,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         if (blob && typeof blob.getFile === 'function') {   // 19.1: a file in the school folder, read from there
           let p = 'prompt'; try { p = await blob.queryPermission({ mode: 'read' }); if (p !== 'granted') p = await blob.requestPermission({ mode: 'read' }); } catch (e) {}
           if (p !== 'granted') throw new Error('The browser wasn\'t allowed to open your school folder. Try again and select Allow (or Edit files).');
-          try { blob = await blob.getFile(); } catch (e) { throw new Error('The ' + lvName(lv) + ' slides file isn\'t in your school folder any more. Put it back in Whole School › Tools › Lesson slides, or add the file in Settings › VLP files.'); }
+          try { blob = await blob.getFile(); } catch (e) { throw new Error('The ' + lvName(lv) + ' slides file isn\'t in your school folder any more. Put it back in Whole School › VLP Resources › Lesson slides, or add the file in Settings › VLP files.'); }
         }
         if (!blob) throw new Error('The ' + lvName(lv) + ' slides aren\'t on this computer any more. Add the file again in Settings › VLP files.');
         return JSZip.loadAsync(blob);
@@ -1686,7 +1686,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
 
   // ---- 19.1: the school's Teaching and Learning folder (connected in Settings › SharePoint folder) ----
-  // A leader puts the slides files in Teaching and Learning › Whole School › Tools › Lesson slides, once for the school.
+  // A leader puts the slides files in Teaching and Learning › Whole School › VLP Resources › Lesson slides, once for the school.
   // Levels found there are read from the folder when needed, not copied into this browser.
   const SCHOOL_PLACES = [['Whole School', 'VLP Resources', 'Lesson slides'], ['VLP Resources', 'Lesson slides'], ['Whole School', 'Tools', 'Lesson slides'], ['Whole School', 'Lesson slides'], ['Whole School', 'Tools'], ['Lesson slides'], []];
   const SP = () => window.VLPSP || null;
@@ -2239,7 +2239,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       $('slidesSchoolNow').innerHTML = !sc ? 'Not connected. Connect the Teaching and Learning folder in <b>SharePoint folder</b> above.'
         : sc.perm !== 'granted' ? 'Connected to "' + esc(sc.name) + '". Select <b>Look in the school folder now</b> and allow the browser to open it.'
         : fromSchool.length ? 'Reading ' + fromSchool.map(lvN).join(', ') + ' from ' + esc(sc.found || sc.name) + '.'
-        : 'Connected to "' + esc(sc.name) + '", but there are no slides files in Whole School › Tools › Lesson slides yet.';
+        : 'Connected to "' + esc(sc.name) + '", but there are no slides files in Whole School › VLP Resources › Lesson slides yet.';
       $('slidesSchoolScan').hidden = !sc;
     }
     $('slidesFolderBox').hidden = true;   // v20: one folder (Teaching and Learning), connected on the first screen
@@ -2268,7 +2268,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     window.open(url, '_blank', 'noopener');
   });
   $('slidesSchoolScan').addEventListener('click', async () => {
-    try { const r = await VLPSLIDESTORE.folder.scan(true); slmsg(r.denied ? 'The browser didn\'t allow access to the folder.' : (r.found || []).length ? 'Checked. Lesson slides found: ' + r.found.map(lvN).join(', ') + '.' : 'No slides files found. Put them in Teaching and Learning › Whole School › Tools › Lesson slides.', r.denied ? 'err' : 'ok'); } catch (e) { slmsg('The folder couldn\'t be opened.', 'err'); }
+    try { const r = await VLPSLIDESTORE.folder.scan(true); slmsg(r.denied ? 'The browser didn\'t allow access to the folder.' : (r.found || []).length ? 'Checked. Lesson slides found: ' + r.found.map(lvN).join(', ') + '.' : 'No slides files found. Put them in Teaching and Learning › Whole School › VLP Resources › Lesson slides.', r.denied ? 'err' : 'ok'); } catch (e) { slmsg('The folder couldn\'t be opened.', 'err'); }
     renderSlidesSet();
   });
   $('slidesAdd').addEventListener('click', () => { $('slidesAddPick').value = ''; $('slidesAddPick').click(); });
@@ -2366,7 +2366,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1500));
   window.addEventListener('load', () => idle(() => { TOOLS.forEach(t => { try { source(t); } catch (_) {} }); }));
   // A newer file than the one last opened in this browser: point to What's new once.
-  if (store.get('vlp.tools.seen', '') !== '20.7'){ store.set('vlp.tools.seen', '20.7'); }
+  if (store.get('vlp.tools.seen', '') !== '20.8'){ store.set('vlp.tools.seen', '20.8'); }
   // v9: open the Repository or Quadrant Check straight away; the Daily Review waits for its slides (show() handles it)
   setTimeout(start, 0);
 })();
@@ -2628,7 +2628,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         <details><summary><b>How to set it up</b> (once on each computer)</summary>
           <ol>
             <li>On your school's SharePoint site, open the <b>Teaching and Learning</b> folder and choose <b>Add shortcut to My files</b> (or <b>Sync</b>). It appears in OneDrive in File Explorer (or Finder).</li>
-            <li>Here, select <b>Connect my Teaching and Learning folder</b>. In the box, open <b>OneDrive</b>, click <b>Teaching and Learning</b> once, then <b>Select folder</b>, and choose <b>Edit files</b> (or <b>Allow</b>). If Chrome says a folder "contains system files", you picked OneDrive itself: choose Teaching and Learning inside it.</li>
+            <li>In File Explorer, open <b>Teaching and Learning</b>, click the address bar at the top and copy the address (it looks like <b>C:\\Users\\…\\OneDrive - Department of Education\\Teaching and Learning</b>).</li>
+            <li>Here, select <b>Connect my Teaching and Learning folder</b>. In the box, click the address bar at the top, paste the address, press <b>Enter</b>, then choose <b>Select folder</b>, and <b>Edit files</b> (or <b>Allow</b>). Don't click the folder under OneDrive in the box's left-hand list: Windows hands the browser a link instead of the folder, and nothing connects.</li>
             <li>That's it. Every VLP tool opened on this computer uses the same folder.</li>
           </ol>
           <p class="vsp-note">The tools never see anything outside that folder. Folders are named by unit, not by week, so next year last year's files are in the same place.</p>
@@ -2642,7 +2643,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       if (b.dataset.vsp === 'connect') {
         const say = t => { const m = msg(); if (m) m.textContent = t; else toast(esc(t)); };
         if (typeof window.showDirectoryPicker !== 'function') { say('This browser can\'t open folders for a website. Use Microsoft Edge or Google Chrome on a computer.'); return; }
-        say('Opening the folder box… Open OneDrive, click Teaching and Learning once, then Select folder. Choose Edit files (or Allow) when asked.');
+        say('Opening the folder box… Paste your Teaching and Learning folder\'s address (copied from File Explorer\'s address bar) into the address bar at the top of the box, press Enter, then Select folder. Choose Edit files (or Allow) when asked.');
         const t0 = Date.now();
         try {
           const r = await connect(); await draw();
@@ -2812,7 +2813,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     ['Quadrant Check sheet and results', '… › the sequence taught that week › Assessment'],
     ['A week with no new sequence', '… › Review and consolidation › Daily Review or Assessment'],
     ['Number fact fluency (the fluency tool)', 'Year 3 › Mathematics › Number fact fluency'],
-    ['Lesson slides (read, not saved)', 'Whole School › Tools › Lesson slides: the VLP Maths Slides files, put there once for the school']]);
+    ['Lesson slides (read, not saved)', 'Whole School › VLP Resources › Lesson slides: the VLP Maths Slides files, put there once for the school']]);
   const now = async () => { const n = document.getElementById('spNow'); if (n) n.textContent = (await VLPSP.connected()) ? 'Connected: ' + VLPSP.name() : (VLPSP.supported ? 'Not connected' : 'Edge or Chrome only'); };
   VLPSP.on(now); now();
   if (VLPSP.hub) { const sec = document.getElementById('set-sp'), st = sec && sec.querySelector('.st'), p = sec && sec.querySelector('.sb2 > p'); if (st) st.textContent = 'Saving to Drive'; if (p) p.innerHTML = 'You opened the tools from your school\'s <b>Teaching and Learning Hub</b>, so the planners, lesson slides, Daily Review slides and Quadrant Checks you make are saved into the hub\'s Google Drive, in the folder of the sequence they belong to.'; }
