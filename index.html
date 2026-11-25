@@ -116,7 +116,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </style>
 <style id="brandCss" data-dyn></style>
 </head>
-<body data-vlp-version="20.6">
+<body data-vlp-version="20.7">
 <div id="vrBoot" class="vr-boot" role="dialog" aria-modal="true" aria-labelledby="vrTitle" data-dyn><div class="vr-card" id="vrCard"><p class="vr-wait">Opening the VLP Maths Tools…</p></div></div>
 <style>
 .vr-boot{position:fixed;inset:0;z-index:2147482000;background:#F3F4F8;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:clamp(16px,6vh,72px) 16px;font:16px/1.5 Calibri,'Segoe UI',Arial,sans-serif;color:#1B1838}
@@ -158,7 +158,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
    slides), add(files) / removeLevel(lv) / mountSettings() (Settings › VLP files). */
 (function () {
   'use strict';
-  const VERSION = '20.6';
+  const VERSION = '20.7';
   const DATA_NAME = 'VLP Maths data - Primary.zip', BAND = 'Primary', ALL = ['F', '1', '2', '3', '4', '5', '6', '7'];
   // a browser adds " (1)" to a second download of the same file
   const RX = /^VLP Maths Retrieval Slides - (Foundation|Level (\d+A?))(?: ?\(\d+\))?\.zip$/i, LX = /^VLP Maths Slides - (Foundation|Level \d+A?)(?: ?\(\d+\))?\.zip$/i;
@@ -510,7 +510,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
   };
 })();
 </script>
-<script>/* VLP Maths Tools 20.6 (25 November 2026): the school's SharePoint folder again, the way Blueprint does it.
+<script>/* VLP Maths Tools 20.6 (25 November 2026), 20.7: read first, then ask to save: the school's SharePoint folder again, the way Blueprint does it.
    A teacher connects the Teaching and Learning folder from OneDrive once (Settings › Your SharePoint folder, or the first
    screen). Then:
      - the VLP files are picked up from Whole School › VLP Resources (data, retrieval slides, school edits) when the tools open
@@ -534,10 +534,11 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
   const supported = () => { const s = SP(); return !!(s && s.supported && !s.hub && typeof window.showDirectoryPicker === 'function'); };
   async function connected() { const s = SP(); if (!s || !supported()) return false; try { return !!(await s.root()); } catch (e) { return false; } }
   // the folder, with permission (ask: in a click, so the browser may ask)
-  async function root(ask) {
+  async function root(ask, mode) {
     const s = SP(); if (!s || !supported()) return null;
     let r = null; try { r = await s.root(); } catch (e) {} if (!r) return null;
-    const p = await s.perm(!!ask);
+    const o = { mode: mode || 'readwrite' };
+    let p = 'prompt'; try { p = await r.queryPermission(o); if (p !== 'granted' && ask) p = await r.requestPermission(o); } catch (e) {}
     return p === 'granted' ? r : { denied: true };
   }
   async function dirAt(r, parts, create) { let d = r; for (const p of parts) d = await d.getDirectoryHandle(p, create ? { create: true } : undefined); return d; }
@@ -546,15 +547,16 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
   // What went wrong opening a folder (Blueprint's wording), ms = how long the box was open
   function pickError(e, ms) {
     const n = e && e.name, m = e && e.message ? ' (' + e.message + ')' : '';
+    const edge = /Edg\//.test(navigator.userAgent) ? ' You\'re in Microsoft Edge: on some school laptops Edge closes the folder box by itself, so try Google Chrome.' : '';
     if (n === 'AbortError' && ms != null && ms < 800) return 'The folder box didn\'t open. Your browser or school settings may be blocking folder access on this computer. The tools will keep downloading files instead. If you\'re in Chrome or Edge on a school laptop, ask IT whether File System Access (File editing) is blocked for ' + location.host + '.';
-    if (n === 'AbortError') return 'No folder was chosen. Try again: open OneDrive, click your Teaching and Learning folder once, then Select folder. If Chrome said a folder "contains system files" or "can\'t be opened", you picked OneDrive itself: choose Teaching and Learning inside it.';
+    if (n === 'AbortError') return 'No folder was chosen. Try again: open OneDrive, click your Teaching and Learning folder once, then Select folder. If Chrome said a folder "contains system files" or "can\'t be opened", you picked OneDrive itself: choose Teaching and Learning inside it.' + edge;
     if (n === 'SecurityError' || n === 'NotAllowedError') return 'The browser blocked that folder' + m + '. If you picked OneDrive, Documents or Desktop itself, choose Teaching and Learning inside it. Otherwise folder access may be switched off on this computer: files will download instead.';
     return 'The folder couldn\'t be connected' + m + '. Files will download instead.';
   }
 
   // ---------- the VLP files from VLP Resources ----------
   async function scan(ask) {
-    const r = await root(ask); if (!r) return { none: true }; if (r.denied) return { denied: true };
+    const r = await root(ask, 'read'); if (!r) return { none: true }; if (r.denied) return { denied: true };
     const rd = await resDir(r); if (!rd) return { nofolder: true };
     const seen = J(SEEN, {}), files = [];
     const look = async d => {
@@ -617,10 +619,11 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 
   // ---------- the first screen: connect instead of choosing files ----------
   async function connectFirst() {
-    const s = SP(); const t0 = Date.now();
-    try { await s.connect(); }
+    const s = SP(); const t0 = Date.now(); let c;
+    try { c = await s.connect(); }
     catch (e) { console.error(e); return { err: pickError(e, Date.now() - t0) }; }
     let r; try { r = await scan(true); } catch (e) { return { err: 'The folder was connected, but VLP Resources couldn\'t be read (' + (e.message || e.name) + ').' }; }
+    if (c && !c.write && !r.nofolder) return { msg: said(r) + ' (Saving into the folder wasn\'t allowed, so files will download. To save there, choose Settings › Your SharePoint folder › Connect again and select Edit files.)' };
     if (r.nofolder) return { err: 'Connected. There\'s no Whole School › VLP Resources folder in it, so choose the files instead (or ask your leader where the VLP files are).' };
     return { msg: said(r) };
   }
@@ -727,7 +730,7 @@ body.haslogo .brand small,body.hasname .brand small{display:none}
 </script>
 
 <header class="bar">
-  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.6 · 25 November 2026</small></div></div>
+  <div class="brand"><img id="brandLogo" alt="School logo" hidden><span class="sch" id="brandName" hidden></span><div class="nm">VLP Maths Tools <span class="band11">PRIMARY</span><small>Version 20.7 · 26 November 2026</small></div></div>
   <div class="tabs" role="tablist" aria-label="Tools">
     <button class="tab" role="tab" id="tab-repo" aria-controls="frame-repo" aria-selected="false" data-tool="repo">Maths Repository</button>
     <button class="tab" role="tab" id="tab-qc" aria-controls="frame-qc" aria-selected="false" data-tool="qc">Quadrant Check</button>
@@ -2363,7 +2366,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1500));
   window.addEventListener('load', () => idle(() => { TOOLS.forEach(t => { try { source(t); } catch (_) {} }); }));
   // A newer file than the one last opened in this browser: point to What's new once.
-  if (store.get('vlp.tools.seen', '') !== '20.6'){ store.set('vlp.tools.seen', '20.6'); }
+  if (store.get('vlp.tools.seen', '') !== '20.7'){ store.set('vlp.tools.seen', '20.7'); }
   // v9: open the Repository or Quadrant Check straight away; the Daily Review waits for its slides (show() handles it)
   setTimeout(start, 0);
 })();
@@ -2429,13 +2432,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     return out;
   }
   async function connect() {
-    let h = await window.showDirectoryPicker({ id: 'vlp-sp', mode: 'readwrite', startIn: 'documents' });
+    let h = await window.showDirectoryPicker({ id: 'vlp-tl', mode: 'read' });
     if (h.name !== ROOT) { try { h = await h.getDirectoryHandle(ROOT); } catch (e) {} }
     const years = await yearsIn(h);
     H = h; loaded = Promise.resolve(h);
     try { await kv('put', 'root', h); } catch (e) {}
+    let w = 'prompt'; try { w = await h.queryPermission({ mode: 'readwrite' }); if (w !== 'granted') w = await h.requestPermission({ mode: 'readwrite' }); } catch (e) { w = 'error: ' + (e.name || e); }
     notify();
-    return { name: h.name, root: h.name === ROOT, years };
+    return { name: h.name, root: h.name === ROOT, years, write: w === 'granted', w };
   }
   async function forget() { H = null; loaded = Promise.resolve(null); try { await kv('del', 'root'); } catch (e) {} notify(); }
   async function write(parts, name, blob) {
@@ -2642,6 +2646,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         const t0 = Date.now();
         try {
           const r = await connect(); await draw();
+          if (!r.write) { say(`You chose "${r.name}". The tools can read it (the VLP files come in from VLP Resources), but the browser didn't allow saving there (${r.w}). Choose Connect again and select Edit files (or Allow) when asked. If no box appears, saving to folders is switched off on this computer: files download instead.`); try { window.VLPFOLDER && VLPFOLDER.auto(); } catch (e) {} return; }
+          try { window.VLPFOLDER && VLPFOLDER.auto(); } catch (e) {}
           if (!r.root && !r.years.length) msg().textContent = `"${r.name}" isn't called Teaching and Learning and has no year level folders in it. The tools will make Foundation, Year 1 … folders inside it. If that isn't right, choose a different folder.`;
         } catch (err) { console.error(err); say(window.VLPRES && VLPRES.pickError ? VLPRES.pickError(err, Date.now() - t0) : 'The folder couldn\'t be connected: ' + (err && err.message || err)); }
       }
