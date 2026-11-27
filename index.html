@@ -2303,7 +2303,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     const d = $('demo');
     d.style.background = BD.hdr === 'light' ? '#fff' : BD.main; d.style.color = BD.hdr === 'light' ? BD.main : '#fff'; d.style.border = BD.hdr === 'light' ? '2px solid ' + BD.main : '0';
     d.style.fontFamily = TH.FONTS[BD.font][1]; d.style.borderRadius = BD.rad === 'square' ? '3px' : '10px';
-    $('demoAcc').style.color = BD.hdr === 'light' ? BD.accent : TH.mix(BD.accent, '#FFFFFF', 0.45); $('demoAcc').textContent = 'Accent';
+    $('demoAcc').style.color = BD.accent; $('demoAcc').textContent = 'Accent';
     $('demoHl').style.background = BD.hl; $('demoHl').style.borderRadius = BD.rad === 'square' ? '3px' : '999px';
     $('demoBtn').style.background = BD.accent; $('demoBtn').style.borderRadius = BD.rad === 'square' ? '3px' : '8px';
     if (document.activeElement !== $('schoolName')) $('schoolName').value = BD.name || '';
